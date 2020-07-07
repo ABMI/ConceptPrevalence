@@ -1,5 +1,8 @@
 library(ConceptPrevalence)
 
+# Minimum cell count when exporting data:
+minCellCount <- 5
+
 # The folder where the study intermediate and result files will be written:
 outputFolder <- "s:/"
 
@@ -21,6 +24,7 @@ oracleTempSchema <- NULL
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
+        oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
         databaseId = databaseId,
         measurement = T,
