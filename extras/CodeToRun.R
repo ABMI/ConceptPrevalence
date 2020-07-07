@@ -21,7 +21,6 @@ oracleTempSchema <- NULL
 
 execute(connectionDetails = connectionDetails,
         cdmDatabaseSchema = cdmDatabaseSchema,
-        oracleTempSchema = oracleTempSchema,
         outputFolder = outputFolder,
         databaseId = databaseId,
         measurement = T,

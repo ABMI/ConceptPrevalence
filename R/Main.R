@@ -65,13 +65,26 @@ execute <- function(connectionDetails,
   ParallelLogger::addDefaultFileLogger(file.path(outputFolder, "log.txt"))
   on.exit(ParallelLogger::unregisterLogger("DEFAULT"))
 
+  tableCounts <- getTableCounts(connectionDetails = connectionDetails,
+                                  cdmDatabaseSchema = cdmDatabaseSchema
+                                  #oracleTempSchema = oracleTempSchema
+                                )
+  saveRDS(tableCounts, file.path(outputFolder, "TableCounts.rds"))
 
+  conceptCounts <- getConceptCounts(connectionDetails = connectionDetails,
+                                   cdmDatabaseSchema = cdmDatabaseSchema,
+                                   #oracleTempSchema = oracleTempSchema,
+                                   measuremen = measurement,
+                                   procedure = procedure,
+                                   device = device,
+                                   minCellCount = minCellCount)
+  saveRDS(conceptCounts, file.path(outputFolder, "ConceptCounts.rds"))
 
-  counts<- getConceptCounts(connectionDetails = connectionDetails,
-                   cdmDatabaseSchema = cdmDatabaseSchema,
-                   cohortDatabaseSchema = cohortDatabaseSchema,
-                   cohortTable = cohortTable,
-                   oracleTempSchema = oracleTempSchema,
-                   outputFolder = outputFolder,
-                   minCellCount = minCellCount)
+  ParallelLogger::logInfo("Adding counts to zip file")
+  zipName <- file.path(outputFolder, paste0("Results", databaseId, ".zip"))
+  files <- list.files(outputFolder, pattern = ".*\\.rds$")
+  oldWd <- setwd(outputFolder)
+  on.exit(setwd(oldWd))
+  DatabaseConnector::createZipFile(zipFile = zipName, files = files)
+  ParallelLogger::logInfo("Results are ready for sharing at:", zipName)
 }

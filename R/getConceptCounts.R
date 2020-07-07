@@ -1,8 +1,8 @@
-getConceptCounts <- function(connectionDetails, cdmDatabseSchema,
+getConceptCounts <- function(connectionDetails, cdmDatabaseSchema,
                              measurement = T, procedure = T, device = T, minCellCount = 5){
   connection <- DatabaseConnector::connect(connectionDetails)
   sql <- system.file("sql", "GetConceptCounts.sql", package = "ConceptPrevalence")
-  sql <- readSql(sql)
+  sql <- SqlRender::readSql(sql)
 
   sql <- SqlRender::renderSql(sql,
                               database_schema=cdmDatabaseSchema,

@@ -29,7 +29,7 @@ IF OBJECT_ID('tempdb..#concept_count_device', 'U') IS NOT NULL
 
 CREATE TABLE #concept_count (
 	concept_id BIGINT,
-	concept_count INT,
+	concept_count BIGINT,
 	table_name varchar(32)
 	);
 
@@ -89,18 +89,18 @@ WHERE concept_count >= @minCellCount
 --SELECT * from #concept_count;
 
 {@measurement} ? {
-TRUNCATE TABLE #concept_count_measurement;
-DROP TABLE #concept_count_measurement;
+IF OBJECT_ID('tempdb..#concept_count_measurement', 'U') IS NOT NULL
+	DROP TABLE #concept_count_measurement;
 }
 
 {@procedure} ? {
-TRUNCATE TABLE #concept_count_procedure;
-DROP TABLE #concept_count_procedure;
+IF OBJECT_ID('tempdb..#concept_count_procedure', 'U') IS NOT NULL
+	DROP TABLE #concept_count_procedure;
 }
 
 {@device} ? {
-TRUNCATE TABLE concept_count_device;
-DROP TABLE concept_count_device;
+IF OBJECT_ID('tempdb..#concept_count_device', 'U') IS NOT NULL
+	DROP TABLE #concept_count_device;
 }
 
 --TRUNCATE TABLE #concept_count;
