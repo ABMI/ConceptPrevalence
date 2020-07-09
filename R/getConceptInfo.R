@@ -14,23 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-getConceptCounts <- function(connectionDetails, cdmDatabaseSchema,
-                             measurement = T, procedure = T, device = T, minCellCount = 5){
+getConceptInfo <- function(connectionDetails, cdmDatabseSchema){
   connection <- DatabaseConnector::connect(connectionDetails)
-  sql <- system.file("sql", "GetConceptCounts.sql", package = "ConceptPrevalence")
+  DatabaseConnector::insertTable(connection = connection, tableName = "#temp_concept",
+                                 data = conceptCounts, tempTable = T)
+  #DatabaseConnector::executeSql(connection, "drop table #temp_concept")
+  sql <- system.file("sql", "GetConceptInfo.sql", package = "ConceptPrevalence")
   sql <- SqlRender::readSql(sql)
-
   sql <- SqlRender::renderSql(sql,
-                              database_schema=cdmDatabaseSchema,
-                              measurement = measurement,
-                              procedure = procedure,
-                              device = device,
-                              minCellCount = minCellCount)$sql
-
+                              database_schema=cdmDatabaseSchema)$sql
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
-  ParallelLogger::logInfo("Counting concepts on server")
+  ParallelLogger::logInfo("Prepare View Shiny on server")
   DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
-  counts <- DatabaseConnector::querySql(connection, "select * from #concept_count")
+  preparedCounts <- DatabaseConnector::querySql(connection, "SELECT * FROM #concept_info")
   DatabaseConnector::disconnect(connection)
-  return(counts)
+  return(preparedCounts)
 }
