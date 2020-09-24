@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-getConceptInfo <- function(connectionDetails, cdmDatabseSchema){
+getConceptInfo <- function(connectionDetails, cdmDatabseSchema, conceptCounts){
+  #conceptCounts <- readRDS(file.path(outputFolder, "ConceptCounts.rds"))
   connection <- DatabaseConnector::connect(connectionDetails)
   DatabaseConnector::insertTable(connection = connection, tableName = "#temp_concept",
                                  data = conceptCounts, tempTable = T)
@@ -24,7 +25,7 @@ getConceptInfo <- function(connectionDetails, cdmDatabseSchema){
   sql <- SqlRender::renderSql(sql,
                               database_schema=cdmDatabaseSchema)$sql
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
-  ParallelLogger::logInfo("Prepare View Shiny on server")
+  ParallelLogger::logInfo("Constructing concept information on server")
   DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
   preparedCounts <- DatabaseConnector::querySql(connection, "SELECT * FROM #concept_info")
   DatabaseConnector::disconnect(connection)

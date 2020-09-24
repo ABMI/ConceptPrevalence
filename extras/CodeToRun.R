@@ -32,3 +32,8 @@ execute(connectionDetails = connectionDetails,
         device = T,
         minCellCount = 5)
 
+prepareViewShiny(connectionDetails=connectionDetails,
+                 cdmDatabseSchema=cdmDatabaseSchema,
+                 dataFolder=outputFolder)
+
+viewShiny(dataFolder=outputFolder)

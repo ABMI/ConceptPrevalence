@@ -69,6 +69,7 @@ execute <- function(connectionDetails,
                                   cdmDatabaseSchema = cdmDatabaseSchema
                                   #oracleTempSchema = oracleTempSchema
                                 )
+
   saveRDS(tableCounts, file.path(outputFolder, "TableCounts.rds"))
 
   conceptCounts <- getConceptCounts(connectionDetails = connectionDetails,
@@ -81,7 +82,9 @@ execute <- function(connectionDetails,
   saveRDS(conceptCounts, file.path(outputFolder, "ConceptCounts.rds"))
 
   ParallelLogger::logInfo("Adding counts to zip file")
-  zipName <- file.path(outputFolder, paste0("Results", databaseId, ".zip"))
+  zipName <- file.path(outputFolder, "Data", paste0("Results", databaseId, ".zip"))
+  if (!file.exists(paste0(outputFolder, "/Data")))
+    dir.create(paste0(outputFolder, "/Data"), recursive = TRUE)
   files <- list.files(outputFolder, pattern = ".*\\.rds$")
   oldWd <- setwd(outputFolder)
   on.exit(setwd(oldWd))
