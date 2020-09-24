@@ -85,7 +85,7 @@ server <- function(input, output) {
 
   output$goalCRBox <- renderValueBox({
     valueBox(
-      paste(round(sum(df_local[which(df_local$CONCEPT_ID %in% source_to_concept_map$target_concept_id),]$CONCEPT_COUNT) / sum(df_local$CONCEPT_COUNT)*100, digit=2),"%"), "Standard-covered rate",
+      paste(round(sum(df_local[which(df_local$CONCEPT_ID %in% df_standard$target_concept_id),]$CONCEPT_COUNT) / sum(df_local$CONCEPT_COUNT)*100, digit=2),"%"), "Standard-covered rate",
       icon = icon("Standard-covered rate"), color = "blue")
   })
 
@@ -100,7 +100,7 @@ server <- function(input, output) {
   })
 
   output$table2 <- renderDT({
-    source_to_concept_map[c(idx),]
+    df_standard[c(idx),]
   })
 
 }
