@@ -26,8 +26,9 @@ viewShiny <- function(dataFolder){
 
   summary <- readRDS(file.path(dataFolder, "Summary.rds"))
 
-  x <- RCurl::getURL("https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv")
-  df_standard <<- read.csv(text = x)
+  urlfile <- 'https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv'
+  df_standard <<- read.csv(url(urlfile))
+
   df_local <- summary[summary[,"TABLE_NAME"]=="measurement",]
 
   #Overview
