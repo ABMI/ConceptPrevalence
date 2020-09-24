@@ -27,7 +27,7 @@ viewShiny <- function(dataFolder){
   summary <- readRDS(file.path(dataFolder, "Summary.rds"))
 
   x <- RCurl::getURL("https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv")
-  df_standard <- read.csv(text = x)
+  df_standard <<- read.csv(text = x)
   df_local <- summary[summary[,"TABLE_NAME"]=="measurement",]
 
   #Overview
@@ -57,6 +57,10 @@ viewShiny <- function(dataFolder){
     DatabaseConnector::disconnect(connection)
 
     preparedCounts$STANDARDIZED <- preparedCounts$CONCEPT_ID %in% df_standard$target_concept_id
+
+    #Global
+    df_local <<- df_local
+    preparedCounts <<- preparedCounts
 
     #return(preparedCounts)
   #}
