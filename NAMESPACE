@@ -1,4 +1,1 @@
 exportPattern("^[[:alpha:]]+")
-imports(DatabaseConnector)
-imports(RCurl)
-imports(shiny)
