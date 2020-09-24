@@ -32,11 +32,11 @@ viewShiny <- function(dataFolder){
 
   #Overview
   sum(df_local$CONCEPT_COUNT)
-  length(df_local$CONCEPT_COUNT) - length(which(df_local$CONCEPT_ID %in% source_to_concept_map$target_concept_id))
+  length(df_local$CONCEPT_COUNT) - length(which(df_local$CONCEPT_ID %in% df_standard$target_concept_id))
 
-  sum(df_local$CONCEPT_COUNT) - sum(df_local[which(df_local$CONCEPT_ID %in% source_to_concept_map$target_concept_id),]$CONCEPT_COUNT)
+  sum(df_local$CONCEPT_COUNT) - sum(df_local[which(df_local$CONCEPT_ID %in% df_standard$target_concept_id),]$CONCEPT_COUNT)
 
-  sum(df_local[which(df_local$CONCEPT_ID %in% source_to_concept_map$target_concept_id),]$CONCEPT_COUNT) / sum(df_local$CONCEPT_COUNT)
+  sum(df_local[which(df_local$CONCEPT_ID %in% df_standard$target_concept_id),]$CONCEPT_COUNT) / sum(df_local$CONCEPT_COUNT)
 
 
   #datatable
