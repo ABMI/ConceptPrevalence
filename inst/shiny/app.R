@@ -57,13 +57,16 @@ ui <- dashboardPage(
 
     fluidRow(
     box(title="Measurement concepts",
-    status="primary",solidHeader = TRUE,DT::dataTableOutput("table"), height=500, width=12)
-    # ,
-    # box(title="Concept recommend",
-    #     status="primary",solidHeader = TRUE,      selectInput("var",
-    #                                                           label = "Choose a variable to display",
-    #                                                           choices = c(queries_list),
-    #                                                           selected = queries_list[1]),DTOutput('table2'), height=600, width=12)
+        status="primary",
+        solidHeader = TRUE,
+        DT::dataTableOutput("table"),
+        height=500, width=12)
+     ,
+     box(title="Concept recommend",
+         status="primary",solidHeader = TRUE,
+         uiOutput("recommendQuery"),
+         dataTableOutput('recommendTable'),
+         height=700, width=12)
     )
     )
 )
@@ -99,10 +102,30 @@ server <- function(input, output) {
       ))))
   })
 
+  output$recommendQuery <- renderUI({
+    selectInput("recommendQuery", "Select query", choices = results.df$querylist)
+  })
+
   output$table2 <- renderDT({
     df_standard[c(idx),]
   })
 
+
+
+  #showTopresults(query = 'pressure', n=5)
+
+  render.table <- eventReactive(input$recommendQuery,{
+    table <- showTopresults(query = input$recommendQuery, n=20)
+    table
+  })
+
+
+  output$recommendTable <- renderDataTable(
+    render.table()
+  )
+
 }
 
 shinyApp(ui, server)
+
+

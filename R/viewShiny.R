@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if(!require("stringr"))
+  install.packages("stringr")
+
 viewShiny <- function(dataFolder){
 
 
@@ -27,6 +30,7 @@ viewShiny <- function(dataFolder){
   df_standard <<- read.csv(url(urlfile))
 
   df_local <- summary[summary[,"TABLE_NAME"]=="measurement",]
+  results.df <<- read.RDS(system.file("RDS", "recommended.RDS", package = "ConceptPrevalence"))
 
   #Overview
   sum(df_local$CONCEPT_COUNT)
