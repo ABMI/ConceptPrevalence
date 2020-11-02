@@ -31,5 +31,6 @@ getConceptInfo <- function(connectionDetails, cdmDatabseSchema, conceptCounts){
   #preparedCounts <- DatabaseConnector::querySql(connection, "SELECT * FROM #concept_info")
   preparedCounts <- DatabaseConnector::querySql(connection, sql)
   DatabaseConnector::disconnect(connection)
+  preparedCounts <- preparedCounts[preparedCounts$CONCEPT_COUNT >= minCellCount,]
   return(preparedCounts)
 }

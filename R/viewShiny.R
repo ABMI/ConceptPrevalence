@@ -28,7 +28,7 @@ viewShiny <- function(dataFolder){
 
   urlfile <- 'https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv'
   df_standard <<- read.csv(url(urlfile))
-  colnames(df_standard) <<- tolower(colnames(df_standard))
+  colnames(df_standard) <- tolower(colnames(df_standard))
 
 
   df_local <- summary[summary[,"TABLE_NAME"]=="measurement",]
