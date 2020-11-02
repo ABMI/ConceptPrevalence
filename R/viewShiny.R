@@ -28,9 +28,12 @@ viewShiny <- function(dataFolder){
 
   urlfile <- 'https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv'
   df_standard <<- read.csv(url(urlfile))
+  colnames(df_standard) <<- tolower(colnames(df_standard))
+
 
   df_local <- summary[summary[,"TABLE_NAME"]=="measurement",]
-  results.df <<- read.RDS(system.file("RDS", "recommended.RDS", package = "ConceptPrevalence"))
+  df_local <- df_local[df_local[,"CONCEPT_ID"] != 0,]
+  results.df <<- readRDS(system.file("RDS", "recommended.RDS", package = "ConceptPrevalence"))
 
   #Overview
   sum(df_local$CONCEPT_COUNT)
@@ -55,7 +58,8 @@ viewShiny <- function(dataFolder){
     sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
     ParallelLogger::logInfo("Constructing concept information on server")
     DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
-    preparedCounts <- DatabaseConnector::querySql(connection, "SELECT * FROM #concept_info")
+    sql <- sql <- SqlRender::translateSql("SELECT * FROM #concept_info", targetDialect = attr(connection, "dbms"))$sql
+    #preparedCounts <- DatabaseConnector::querySql(connection, "SELECT * FROM #concept_info")
     DatabaseConnector::disconnect(connection)
 
     preparedCounts$STANDARDIZED <- preparedCounts$CONCEPT_ID %in% df_standard$target_concept_id

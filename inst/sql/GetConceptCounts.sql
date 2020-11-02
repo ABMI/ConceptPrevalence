@@ -35,59 +35,67 @@ CREATE TABLE #concept_count (
 
 -- Concept prevalence by tables
 {@measurement} ? {
-	SELECT measurement_concept_id, count(*) as concept_count, 'measurement' as table_name
-	INTO #concept_count_measurement
-	FROM @database_schema.measurement
-	GROUP BY measurement_concept_id
-;
+	--SELECT measurement_concept_id, count(*) as concept_count, 'measurement' as table_name
+	--INTO #concept_count_measurement
+	--FROM @database_schema.measurement
+	--GROUP BY measurement_concept_id
+--;
  INSERT INTO #concept_count (
    	 concept_id,
 		 concept_count,
 		 table_name
 	)
-SELECT measurement_concept_id, concept_count, table_name
-FROM #concept_count_measurement
-WHERE concept_count >= @minCellCount
+SELECT measurement_concept_id, count(*) as concept_count , 'measurement' as table_name
+FROM @database_schema.measurement
+--FROM #concept_count_measurement
+--WHERE concept_count >= @minCellCount
+--WHERE count(*) >= @minCellCount
+GROUP BY measurement_concept_id
 ;
 }
 
 {@procedure} ? {
-	SELECT procedure_concept_id, count(*) as concept_count, 'procedure' as table_name
-	INTO #concept_count_procedure
-	FROM @database_schema.procedure_occurrence
-	GROUP BY procedure_concept_id
-	;
+	--SELECT procedure_concept_id, count(*) as concept_count, 'procedure' as table_name
+	--INTO #concept_count_procedure
+	--FROM @database_schema.procedure_occurrence
+	--GROUP BY procedure_concept_id
+--;
 	INSERT INTO #concept_count (
   	 concept_id,
 		 concept_count,
 		 table_name
 	)
-SELECT procedure_concept_id, concept_count, table_name
-FROM #concept_count_procedure
-WHERE concept_count >= @minCellCount
+SELECT procedure_concept_id, count(*) as concept_count, 'procedure' as table_name
+FROM @database_schema.procedure_occurrence
+--FROM #concept_count_procedure
+--WHERE concept_count >= @minCellCount
+--WHERE count(*) >= @minCellCount
+GROUP BY procedure_concept_id
 ;
 }
 
 {@device} ? {
-	SELECT device_concept_id, count(*) as concept_count, 'device' as table_name
-	INTO #concept_count_device
-	FROM @database_schema.device_exposure
-	GROUP BY device_concept_id
-	;
+	--SELECT device_concept_id, count(*) as concept_count, 'device' as table_name
+	--INTO #concept_count_device
+	--FROM @database_schema.device_exposure
+	--GROUP BY device_concept_id
+--;
 	 INSERT INTO #concept_count (
    	 concept_id,
 		 concept_count,
 		 table_name
 	)
-SELECT device_concept_id, concept_count, table_name
-FROM #concept_count_device
-WHERE concept_count >= @minCellCount
+SELECT device_concept_id, count(*) as concept_count, 'device' as table_name
+--FROM #concept_count_device
+FROM @database_schema.device_exposure
+--WHERE concept_count >= @minCellCount
+--WHERE count(*) >= @minCellCount
+GROUP BY device_concept_id
 ;
 }
 
-
 --SELECT * from #concept_count;
-
+/*
 {@measurement} ? {
 IF OBJECT_ID('tempdb..#concept_count_measurement', 'U') IS NOT NULL
 	DROP TABLE #concept_count_measurement;
@@ -102,6 +110,7 @@ IF OBJECT_ID('tempdb..#concept_count_procedure', 'U') IS NOT NULL
 IF OBJECT_ID('tempdb..#concept_count_device', 'U') IS NOT NULL
 	DROP TABLE #concept_count_device;
 }
+*/
 
 --TRUNCATE TABLE #concept_count;
 --DROP TABLE #concept_count;
