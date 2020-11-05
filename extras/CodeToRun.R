@@ -36,4 +36,5 @@ prepareViewShiny(connectionDetails=connectionDetails,
                  cdmDatabseSchema=cdmDatabaseSchema,
                  dataFolder=outputFolder)
 
-viewShiny(dataFolder=outputFolder)
+viewShiny(dataFolder=outputFolder,
+          pathToCsv=NULL)
