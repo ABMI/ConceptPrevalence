@@ -28,7 +28,7 @@ viewShiny <- function(dataFolder, pathToCsv){
 
   if (is.null(pathToCsv)){
     urlfile <- 'https://raw.githubusercontent.com/ohdsi-korea/OmopVocabularyKorea/master/measurement_guideline/source_to_concept_map.csv'
-    df_standard <<- read.csv(url(urlfile))
+    df_standard <- read.csv(url(urlfile))
     colnames(df_standard) <- tolower(colnames(df_standard))
   } else {
     df_standard <- read.csv(pathToCsv)
@@ -51,26 +51,30 @@ viewShiny <- function(dataFolder, pathToCsv){
   #datatable
   #if(datatable==T){
 
-    connection <- DatabaseConnector::connect(connectionDetails)
-    #DatabaseConnector::executeSql(connection, "drop table #temp_concept")
-    DatabaseConnector::insertTable(connection = connection, tableName = "#temp_concept",
-                                   data = df_local, tempTable = T)
-    sql <- system.file("sql", "GetConceptInfo.sql", package = "ConceptPrevalence")
-    sql <- SqlRender::readSql(sql)
-    sql <- SqlRender::renderSql(sql,
-                                database_schema=cdmDatabaseSchema)$sql
-    sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
-    ParallelLogger::logInfo("Constructing concept information on server")
-    DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
-    sql <- SqlRender::translateSql("SELECT * FROM #concept_info", targetDialect = attr(connection, "dbms"))$sql
-    preparedCounts <- DatabaseConnector::querySql(connection, sql)
-    DatabaseConnector::disconnect(connection)
+    # connection <- DatabaseConnector::connect(connectionDetails)
+    # #DatabaseConnector::executeSql(connection, "drop table #temp_concept")
+    # DatabaseConnector::insertTable(connection = connection, tableName = "#temp_concept",
+    #                                data = df_local, tempTable = T)
+    # sql <- system.file("sql", "GetConceptInfo.sql", package = "ConceptPrevalence")
+    # sql <- SqlRender::readSql(sql)
+    # sql <- SqlRender::renderSql(sql,
+    #                             database_schema=cdmDatabaseSchema)$sql
+    # sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
+    # ParallelLogger::logInfo("Constructing concept information on server")
+    # DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
+    # sql <- SqlRender::translateSql("SELECT * FROM #concept_info", targetDialect = attr(connection, "dbms"))$sql
+    # preparedCounts <- DatabaseConnector::querySql(connection, sql)
+    # DatabaseConnector::disconnect(connection)
 
-    preparedCounts$STANDARDIZED <- preparedCounts$CONCEPT_ID %in% df_standard$target_concept_id
+
+    # preparedCounts$STANDARDIZED <- preparedCounts$CONCEPT_ID %in% df_standard$target_concept_id
+    df_local$STANDARDIZED <- df_local$CONCEPT_ID %in% df_standard$target_concept_id
+    preparedCounts <<- df_local[ , -which(names(df_local) %in% c("DB_NAME"))]
+    df_standard <<- df_standard
 
     #Global
-    df_local <<- df_local
-    preparedCounts <<- preparedCounts
+    #df_local <<- df_local
+    #preparedCounts <<- preparedCounts
 
     #return(preparedCounts)
   #}

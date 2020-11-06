@@ -76,19 +76,19 @@ server <- function(input, output) {
 
   output$sessionBox <- renderValueBox({
     valueBox(
-      format(length(df_local$CONCEPT_COUNT),format="d",big.mark=","),
+      format(length(preparedCounts$CONCEPT_COUNT),format="d",big.mark=","),
       "Concepts", icon = icon("area-chart"), color = "blue")
   })
 
   output$goalBox <- renderValueBox({
     valueBox(
-      format(sum(df_local$CONCEPT_COUNT),format="d",big.mark=","),
+      format(sum(preparedCounts$CONCEPT_COUNT),format="d",big.mark=","),
       "Rows", icon = icon("shopping-cart"), color = "blue")
   })
 
   output$goalCRBox <- renderValueBox({
     valueBox(
-      paste(round(sum(df_local[which(df_local$CONCEPT_ID %in% df_standard$target_concept_id),]$CONCEPT_COUNT) / sum(df_local$CONCEPT_COUNT)*100, digit=2),"%"), "Standard-covered rate",
+      paste(round(sum(preparedCounts[which(preparedCounts$CONCEPT_ID %in% df_standard$target_concept_id),]$CONCEPT_COUNT) / sum(preparedCounts$CONCEPT_COUNT)*100, digit=2),"%"), "Standard-covered rate",
       icon = icon("Standard-covered rate"), color = "blue")
   })
 
