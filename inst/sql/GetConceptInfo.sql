@@ -43,5 +43,5 @@ FROM #temp_concept A LEFT JOIN @database_schema.concept b
 	ON a.concept_id = b.concept_id;
 ;
 
-TRUNCATE TABLE #concept_info;
-DROP TABLE #concept_info;
+--TRUNCATE TABLE #concept_info;
+--DROP TABLE #concept_info;

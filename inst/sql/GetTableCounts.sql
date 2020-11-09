@@ -42,5 +42,5 @@ INSERT INTO #table_count (
   	FROM @database_schema.device_exposure
 ;
 
-TRUNCATE TABLE #table_count;
-DROP TABLE #table_count;
+--TRUNCATE TABLE #table_count;
+--DROP TABLE #table_count;

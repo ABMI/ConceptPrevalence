@@ -25,9 +25,10 @@ getTableCounts <- function(connectionDetails, cdmDatabaseSchema){
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   ParallelLogger::logInfo("Counting tables on server")
   DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
-  sql <- SqlRender::translateSql("select * from #table_count", targetDialect = attr(connection, "dbms"))$sql
-  #counts <- DatabaseConnector::querySql(connection, "select * from #table_count")
+  sql <- SqlRender::translateSql("select * from #table_count;", targetDialect = attr(connection, "dbms"))$sql
   counts <- DatabaseConnector::querySql(connection, sql)
+  sql <- SqlRender::translateSql("TRUNCATE TABLE #table_count; DROP TABLE #table_count;", targetDialect = attr(connection, "dbms"))$sql
+  DatabaseConnector::executeSql(connection, sql)
   DatabaseConnector::disconnect(connection)
   return(counts)
 }

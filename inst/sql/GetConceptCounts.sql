@@ -112,5 +112,5 @@ IF OBJECT_ID('tempdb..#concept_count_device', 'U') IS NOT NULL
 }
 */
 
-TRUNCATE TABLE #concept_count;
-DROP TABLE #concept_count;
+--TRUNCATE TABLE #concept_count;
+--DROP TABLE #concept_count;

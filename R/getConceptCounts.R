@@ -30,10 +30,11 @@ getConceptCounts <- function(connectionDetails, cdmDatabaseSchema,
   sql <- SqlRender::translateSql(sql, targetDialect = attr(connection, "dbms"))$sql
   ParallelLogger::logInfo("Counting concepts on server")
   DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE)
-  sql <- SqlRender::translateSql("select * from #concept_count", targetDialect = attr(connection, "dbms"))$sql
+  sql <- SqlRender::translateSql("select * from #concept_count;", targetDialect = attr(connection, "dbms"))$sql
   counts <- DatabaseConnector::querySql(connection, sql)
+  sql <- SqlRender::translateSql("TRUNCATE TABLE #concept_count; DROP TABLE #concept_count;", targetDialect = attr(connection, "dbms"))$sql
+  DatabaseConnector::executeSql(connection, sql)
   counts <- counts[counts$CONCEPT_COUNT >= minCellCount,]
-
   DatabaseConnector::disconnect(connection)
   return(counts)
 }
