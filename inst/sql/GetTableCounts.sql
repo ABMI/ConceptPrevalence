@@ -41,3 +41,6 @@ INSERT INTO #table_count (
   	SELECT count(*) as table_count, 'device' as table_name
   	FROM @database_schema.device_exposure
 ;
+
+TRUNCATE TABLE #table_count;
+DROP TABLE #table_count;

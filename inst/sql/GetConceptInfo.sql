@@ -15,6 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ************************************************************************/
+IF OBJECT_ID('tempdb..#concept_info', 'U') IS NOT NULL
+	DROP TABLE #concept_info;
 
 CREATE TABLE #concept_info (
 	concept_id BIGINT,
@@ -40,3 +42,6 @@ SELECT a.concept_id, a.concept_count, a.table_name, b.domain_id, b.standard_conc
 FROM #temp_concept A LEFT JOIN @database_schema.concept b
 	ON a.concept_id = b.concept_id;
 ;
+
+TRUNCATE TABLE #concept_info;
+DROP TABLE #concept_info;
